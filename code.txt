@@ -1,0 +1,144 @@
+swagger: "2.0"
+info: 
+  title: Users List
+  description: Access to user list
+  contact:
+    name: Marcel Pedroni
+    email: marcelpedroni@email.com
+  version: "0.0.1"
+host: api.pageweb.com  
+schemes:
+  - https
+basePath: /v1
+produces: 
+ - application/json
+paths: 
+  /users:
+    get:
+      summary: User list 
+      description: This endpoint returns all users registered in the system.
+      tags: 
+        - Users
+      responses:
+        200:
+          description: Array of users
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create an user 
+      description: This endpoint create an user in the system.
+      parameters:
+        - name: user
+          in: body
+          description: User 
+          required: true
+          schema: 
+           $ref: '#/definitions/User'
+      tags: 
+        - Users
+      responses:
+        201:
+          description: Return an user created
+          schema:
+              $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Update an user 
+      description: This endpoint update an user in the system. Must use an id of user as a parameter.
+      parameters:
+        - name: user
+          in: body
+          description: User 
+          required: true
+          schema: 
+           $ref: '#/definitions/User'
+      tags: 
+        - Users
+      responses:
+        200:
+          description: User updated with success
+          schema:
+              $ref: '#/definitions/User'
+        404:
+          description: User not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /users/{id}:
+    get:
+      summary: Show an user  
+      description: This endpoint returns a specific user registered in the system.
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: integer
+      tags: 
+        - Users
+      responses:
+        200:
+          description: A User
+          schema:
+              $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete an user  
+      description: This endpoint delete an a specific user.
+      parameters:
+        - name: id
+          in: path
+          description: User id
+          required: true
+          type: integer
+      tags: 
+        - Users
+      responses:
+        200:
+          description: A user has been deleted
+          schema:
+              $ref: '#/definitions/User'
+        404:
+          description: User not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  User:
+    type: object
+    required:
+      - name
+      - email
+    properties: 
+      id: 
+        type: integer
+        description: user code
+      email:
+        type: string
+        description: user email
+      name:
+        type: string
+        description: name of user
+        
+  Error:
+    type: object
+    properties: 
+      code: 
+        type: integer
+        format: int32
+      message:
+        type: string
